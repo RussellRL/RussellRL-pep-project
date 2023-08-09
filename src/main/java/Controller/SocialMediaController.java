@@ -47,10 +47,10 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
         //TODO: implement when account already exists in the format
-        if(account.getUsername() == "" || (account.getPassword()).length() < 4 || accountService.checkForAccount(account) == true ) {
+        if(accountService.addAccount(account) == null) {
             context.status(400);
         } else {
-            context.json(mapper.writeValueAsString((account)));
+            context.json(accountService.addAccount(account));
             context.status(200);
         }
     }
