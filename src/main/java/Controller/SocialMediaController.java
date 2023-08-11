@@ -1,12 +1,17 @@
 package Controller;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
+import Model.Message;
 
 import DAO.AccountDAO;
+import DAO.MessageDAO;
 import Service.AccountService;
+import Service.MessageService;
 
 //import Application.DAO.AccountDAO
 //import Model.Message;
@@ -23,7 +28,9 @@ import io.javalin.http.Context;
  */
 public class SocialMediaController {
     AccountDAO accountDAO = new AccountDAO();
+    MessageDAO messageDAO = new MessageDAO();
     AccountService accountService = new AccountService(accountDAO);
+    MessageService messageService = new MessageService(messageDAO);
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -34,6 +41,8 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.post("/register", this::registerUserHandler);
         app.post("/login", this::loginUserHandler);
+        app.post("/messages", this::createMessageHandler);
+        app.get("/messages", this::getMessagesHandler);
 
         return app;
     }
@@ -66,5 +75,18 @@ public class SocialMediaController {
         } else context.status(401);
     }
 
+    private void createMessageHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message newMessage = messageService.insertMessage(message);
+        if(newMessage == null) {
+            context.status(400);
+        } else context.json(newMessage);
+    }
+
+    private void getMessagesHandler(Context context) throws JsonProcessingException {
+        List<Message> messages = messageService.getAllMessages();
+        context.json(messages);
+    }
 
 }
