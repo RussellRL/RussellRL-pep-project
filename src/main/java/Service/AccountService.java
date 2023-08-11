@@ -27,4 +27,5 @@ public class AccountService {
         if(accountDAO.getAccount(account) != null) return accountDAO.getAccount(account);
         else return null;
     }
+
 }
