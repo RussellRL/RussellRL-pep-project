@@ -3,22 +3,28 @@ package Service;
 import java.util.List;
 
 import DAO.MessageDAO;
+import DAO.AccountDAO;
+import Model.Account;
 import Model.Message;
 
 
 public class MessageService {
     public MessageDAO messageDAO;
+    public AccountDAO accountDAO;
 
     public MessageService() {
         messageDAO = new MessageDAO();
+        accountDAO = new AccountDAO();
     }
 
-    public MessageService(MessageDAO messageDAO) {
+    public MessageService(MessageDAO messageDAO, AccountDAO accountDAO) {
         this.messageDAO = messageDAO;
+        this.accountDAO = accountDAO;
     }
 
     public Message insertMessage(Message message) {
-        if(message.getMessage_text().length() == 0 || message.getMessage_text().length() > 254) {
+        if(message.getMessage_text().length() == 0 || message.getMessage_text().length() > 254
+            || message.getPosted_by() != accountDAO.getAccountID(message.getPosted_by())) {
             return null;
         } else return messageDAO.insertMessage(message);
         

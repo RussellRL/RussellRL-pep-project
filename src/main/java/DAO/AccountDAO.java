@@ -50,6 +50,26 @@ public class AccountDAO {
         }
         return null;
     }
+
+    public int getAccountID(int id) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM Account WHERE account_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()) {
+                int accountID = rs.getInt("account_id");
+                return accountID;
+            }
+
+        }catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
     
 
     //insertion into table

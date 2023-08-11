@@ -30,7 +30,7 @@ public class SocialMediaController {
     AccountDAO accountDAO = new AccountDAO();
     MessageDAO messageDAO = new MessageDAO();
     AccountService accountService = new AccountService(accountDAO);
-    MessageService messageService = new MessageService(messageDAO);
+    MessageService messageService = new MessageService(messageDAO, accountDAO);
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
