@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
+    public AccountDAO () {}
     //get all accounts
     public List<Account> getAllAccounts() {
         Connection connection = ConnectionUtil.getConnection();
@@ -37,12 +38,11 @@ public class AccountDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1,account.getUsername());
-            preparedStatement.setString(2, account.getPassword());
+            preparedStatement.setString(2,account.getPassword());
             
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()) {
-                return new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password"));
-                
+                return new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password"));  
             }
 
         }catch(SQLException e) {
@@ -68,38 +68,13 @@ public class AccountDAO {
             
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while(rs.next()) {
-                /*implement */
-                //set values - call getusername and password 
-                //return new Account(account.getAccount_id());
+                int generated_account_id = (int) rs.getLong(1);
+                return new Account(generated_account_id, account.getUsername(), account.getPassword());
             }
         }catch(SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
-    }
-
-
-     public boolean checkForAccount (Account account) {
-        Connection connection = ConnectionUtil.getConnection();
-        List<String> usernames = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM Account ";
-            PreparedStatement pS = connection.prepareStatement(sql);
-
-            ResultSet rs = pS.executeQuery();
-            while(rs.next()) {
-                String name = rs.getString("username");
-                usernames.add(name);
-            }
-            
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        for(String s : usernames) {
-            if(s == account.getUsername()) return true;
-        }
-        return false;   
     }
 
 } 

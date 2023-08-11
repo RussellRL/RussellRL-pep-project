@@ -17,13 +17,14 @@ public class AccountService {
     }
 
     public Account addAccount(Account account) {
-        if(account.getUsername().length() == 0 || (account.getPassword()).length() < 4 || accountDAO.getAccount(account) != null ) {
+        if((account.getUsername()).length() == 0 || (account.getPassword()).length() < 4 || accountDAO.getAccount(account) != null ) {
             return null;
         }
         return accountDAO.insertAccount(account);
     }
 
-    public boolean checkForAccount(Account account) {
-        return accountDAO.checkForAccount(account);
+    public Account getAccount(Account account) {
+        if(accountDAO.getAccount(account) != null) return accountDAO.getAccount(account);
+        else return null;
     }
 }
