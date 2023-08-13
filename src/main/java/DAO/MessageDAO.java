@@ -97,4 +97,30 @@ public class MessageDAO {
         }
         return deletedMessage;
     }
+
+    public Message updateMessssage(int id, String text) {
+        Connection connection = ConnectionUtil.getConnection();
+        Message updatedMessage = getMessageByID(id);
+        if(updatedMessage == null) return null;
+        try {
+            String sql = "UPDATE Message SET message_text = ? WHERE message_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, text);
+            preparedStatement.setInt(2, id);
+           
+            ResultSet rs =  preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                Message message = new Message(rs.getInt("message_id"),
+                rs.getInt("posted_by"),
+                rs.getString("message_text"),
+                rs.getLong("time_posted_epoch"));
+                return message;
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }

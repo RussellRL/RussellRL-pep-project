@@ -41,4 +41,9 @@ public class MessageService {
     public Message deleteMessageByID(int id) {
         return messageDAO.deleteMessageByID(id);
     }
+
+    public Message updateMessage(int id, String text) {
+        if(text.length() == 0 || text.length() > 255) return messageDAO.updateMessssage(id, text);
+        else return null;
+    }
 }

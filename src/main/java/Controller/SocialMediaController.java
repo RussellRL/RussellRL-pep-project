@@ -45,6 +45,7 @@ public class SocialMediaController {
         app.get("/messages", this::getMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByID);
         app.delete("/messages/{message_id}", this::deleteMessageByID);
+        app.patch("/messages/{message_id}", this::updateMessageHandler);
 
         return app;
     }
@@ -101,6 +102,16 @@ public class SocialMediaController {
         int fetchID = Integer.parseInt(context.pathParam("message_id"));
         Message deletedMessage = messageDAO.deleteMessageByID(fetchID);
         if(deletedMessage != null) context.json(deletedMessage);
+    }
+
+    private void updateMessageHandler(Context context) throws JsonProcessingException {
+        String updatedText = context.body();
+        int fetchID = Integer.parseInt(context.pathParam("message_id"));
+        Message updatedMessage = messageService.updateMessage(fetchID, updatedText);
+        if(updatedMessage != null) {
+            context.json(updatedMessage);
+        }
+        else context.status(400);
     }
 
 }
