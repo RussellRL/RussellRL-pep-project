@@ -102,9 +102,7 @@ public class MessageDAO {
     public Message updateMessssage(int id, String text) {
         Connection connection = ConnectionUtil.getConnection();
         Message updatedMessage = getMessageByID(id);
-        System.out.println("BEFORE");
         if(updatedMessage == null) return null;
-        System.out.println("AFTER");
 
         try {
             String sql = "UPDATE Message SET message_text = ? WHERE message_id = ?";

@@ -79,6 +79,7 @@ public class SocialMediaController {
         } else context.status(401);
     }
 
+    //create message handler for creating messages endpoint
     private void createMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
@@ -88,23 +89,27 @@ public class SocialMediaController {
         } else context.json(newMessage);
     }
 
+    //get messages handler for getting all messages in database
     private void getMessagesHandler(Context context) throws JsonProcessingException {
         List<Message> messages = messageService.getAllMessages();
         context.json(messages);
     }
 
+    //get messages by id handler for getting messages by a message id
     private void getMessageByIDHandler(Context context) throws JsonProcessingException {
         int fetchID = Integer.parseInt(context.pathParam("message_id"));
         Message fetchMessage = messageService.getMessageByID(fetchID);
         if(fetchMessage != null) context.json(fetchMessage);
     }
     
+    //delete message by id handler deletes a message by message id
     private void deleteMessageByIDHandler(Context context) throws JsonProcessingException {
         int fetchID = Integer.parseInt(context.pathParam("message_id"));
         Message deletedMessage = messageDAO.deleteMessageByID(fetchID);
         if(deletedMessage != null) context.json(deletedMessage);
     }
 
+    //update message handler for updating an existing message
     private void updateMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message updatedMessage = mapper.readValue(context.body(), Message.class);
@@ -116,6 +121,7 @@ public class SocialMediaController {
         else context.status(400);
     }
 
+    //get all messages from user handler for getting all messages from one user
     private void getAllMessagesFromUserHandler(Context context) throws JsonProcessingException {
         int fetchID = Integer.parseInt(context.pathParam("account_id"));
         context.json(messageDAO.getAllMessagesFromUser(fetchID));
