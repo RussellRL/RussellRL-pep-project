@@ -44,7 +44,7 @@ public class MessageService {
 
     public Message updateMessage(int id, String text) {
         System.out.println("MESSAGE SERVICE");
-        if(text.length() == 0 || text.length() > 255) return null;
+        if(text.length() == 0 || text.length() > 254) return null;
         else return messageDAO.updateMessssage(id, text);
     }
 }
