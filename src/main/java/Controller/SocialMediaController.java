@@ -43,9 +43,10 @@ public class SocialMediaController {
         app.post("/login", this::loginUserHandler);
         app.post("/messages", this::createMessageHandler);
         app.get("/messages", this::getMessagesHandler);
-        app.get("/messages/{message_id}", this::getMessageByID);
-        app.delete("/messages/{message_id}", this::deleteMessageByID);
+        app.get("/messages/{message_id}", this::getMessageByIDHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageByIDHandler);
         app.patch("/messages/{message_id}", this::updateMessageHandler);
+        app.get("accounts/{account_id}/messages", this::getAllMessagesFromUserHandler);
 
         return app;
     }
@@ -92,13 +93,13 @@ public class SocialMediaController {
         context.json(messages);
     }
 
-    private void getMessageByID(Context context) throws JsonProcessingException {
+    private void getMessageByIDHandler(Context context) throws JsonProcessingException {
         int fetchID = Integer.parseInt(context.pathParam("message_id"));
         Message fetchMessage = messageService.getMessageByID(fetchID);
         if(fetchMessage != null) context.json(fetchMessage);
     }
     
-    private void deleteMessageByID(Context context) throws JsonProcessingException {
+    private void deleteMessageByIDHandler(Context context) throws JsonProcessingException {
         int fetchID = Integer.parseInt(context.pathParam("message_id"));
         Message deletedMessage = messageDAO.deleteMessageByID(fetchID);
         if(deletedMessage != null) context.json(deletedMessage);
@@ -115,4 +116,8 @@ public class SocialMediaController {
         else context.status(400);
     }
 
+    private void getAllMessagesFromUserHandler(Context context) throws JsonProcessingException {
+        int fetchID = Integer.parseInt(context.pathParam("account_id"));
+        context.json(messageDAO.getAllMessagesFromUser(fetchID));
+    }
 }
