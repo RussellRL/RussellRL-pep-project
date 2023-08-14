@@ -101,7 +101,10 @@ public class MessageDAO {
     public Message updateMessssage(int id, String text) {
         Connection connection = ConnectionUtil.getConnection();
         Message updatedMessage = getMessageByID(id);
+        System.out.println("BEFORE");
         if(updatedMessage == null) return null;
+        System.out.println("AFTER");
+
         try {
             String sql = "UPDATE Message SET message_text = ? WHERE message_id = ?";
 
@@ -109,15 +112,9 @@ public class MessageDAO {
             preparedStatement.setString(1, text);
             preparedStatement.setInt(2, id);
            
-            ResultSet rs =  preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            while(rs.next()) {
-                Message message = new Message(rs.getInt("message_id"),
-                rs.getInt("posted_by"),
-                rs.getString("message_text"),
-                rs.getLong("time_posted_epoch"));
-                return message;
-            }
+            return updatedMessage = getMessageByID(id);
         }catch (SQLException e) {
             System.out.println(e.getMessage());
         }
